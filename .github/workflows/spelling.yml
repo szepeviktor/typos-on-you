@@ -3,10 +3,11 @@
 name: "Spelling"
 
 on:  # yamllint disable-line rule:truthy
-    workflow_call:
+    workflow_dispatch:
         inputs:
             repository:
                 type: "string"
+                description: "Format: username/repository"
                 required: true
 
 permissions:
