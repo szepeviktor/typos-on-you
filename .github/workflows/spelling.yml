@@ -7,7 +7,7 @@ on:  # yamllint disable-line rule:truthy
         inputs:
             repository:
                 type: "string"
-                description: "Format: username/repository"
+                description: "Repository: username/project"
                 required: true
 
 permissions:
