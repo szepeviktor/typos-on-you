@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
+name: "Spelling"
+
+on:  # yamllint disable-line rule:truthy
+    workflow_call:
+        inputs:
+            repository:
+                type: "string"
+                required: true
+
+permissions:
+    contents: "read"
+
+concurrency:
+    group: "${{ github.workflow }}-${{ github.ref }}"
+    cancel-in-progress: true
+
+jobs:
+    typos_check:
+        name: "文A Typos check"
+        runs-on: "ubuntu-22.04"
+        timeout-minutes: 1
+        steps:
+        -
+            name: "Checkout repository"
+            uses: "actions/checkout@v3"
+            with:
+                repository: "${{ input.repository }}"
+        -
+            name: "Search for misspellings"
+            uses: "crate-ci/typos@master"
