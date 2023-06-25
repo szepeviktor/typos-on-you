@@ -27,7 +27,7 @@ jobs:
             name: "Checkout repository"
             uses: "actions/checkout@v3"
             with:
-                repository: "${{ input.repository }}"
+                repository: "${{ inputs.repository }}"
         -
             name: "Search for misspellings"
             uses: "crate-ci/typos@master"
