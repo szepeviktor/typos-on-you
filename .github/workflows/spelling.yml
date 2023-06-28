@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 
-name: "Spelling"
+name: "Spelling - ${{ inputs.repository }}"
 
 on:  # yamllint disable-line rule:truthy
     workflow_dispatch:
