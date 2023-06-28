@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 
-name: "Spelling - ${{ inputs.repository }}"
+name: "Spelling"
 
 on:  # yamllint disable-line rule:truthy
     workflow_dispatch:
@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
     typos_check:
-        name: "文A Typos check"
+        name: "文A Typos check - ${{ inputs.repository }}"
         runs-on: "ubuntu-22.04"
         timeout-minutes: 1
         steps:
