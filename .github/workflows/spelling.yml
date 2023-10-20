@@ -18,8 +18,8 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    typos_check:
-        name: "文A Typos check - ${{ inputs.repository }}"
+    codespell_check:
+        name: "文A codespell check - ${{ inputs.repository }}"
         runs-on: "ubuntu-22.04"
         timeout-minutes: 1
         steps:
@@ -30,4 +30,10 @@ jobs:
                 repository: "${{ inputs.repository }}"
         -
             name: "Search for misspellings"
-            uses: "crate-ci/typos@master"
+            uses: "codespell-project/actions-codespell@v2.0"
+            with:
+                skip: "./.git,package-lock.json"
+                check_hidden: true
+                check_filenames: true
+                builtin: "clear,rare,informal,usage,code,names"
+                ignore_words_list: "master"
