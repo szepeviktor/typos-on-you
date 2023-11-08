@@ -43,6 +43,6 @@ jobs:
                     --quiet --output-document=- "${RELEASE_ASSET_URL}" \
                     | tar -xz -C "${{ runner.temp }}/typos" ./typos
                 "${{ runner.temp }}/typos/typos" --version
-                git grep --files-with-matches --null -I -e '.' -- ':!:dist/' ':!:vendor/' \
-                    | xargs --null --verbose -- "${{ runner.temp }}/typos/typos" --format json \
+                git grep --files-with-matches -I -e '.' -- ':!:dist/' ':!:vendor/' \
+                    | "${{ runner.temp }}/typos/typos" --file-list - --format json \
                     | jq --raw-output '"::warning file=\(.path),line=\(.line_num),col=\(.byte_offset)::\"\(.typo)\" should be \"" + (.corrections // [] | join("\" or \"") + "\".")'
