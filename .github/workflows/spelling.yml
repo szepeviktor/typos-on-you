@@ -32,7 +32,7 @@ jobs:
             name: "Search for misspellings"
             uses: "codespell-project/actions-codespell@v2.0"
             with:
-                skip: "./.git,package-lock.json"
+                skip: "./.git,package-lock.json,dist,vendor"
                 check_hidden: true
                 check_filenames: true
                 builtin: "clear,rare,informal,usage,code,names"
