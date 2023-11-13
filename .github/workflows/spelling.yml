@@ -18,8 +18,8 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    codespell_check:
-        name: "文A codespell check - ${{ inputs.repository }}"
+    topy_check:
+        name: "文A Topy check - ${{ inputs.repository }}"
         runs-on: "ubuntu-22.04"
         timeout-minutes: 1
         steps:
@@ -35,14 +35,17 @@ jobs:
                 path: "~/.cache/pip"
                 key: "${{ runner.os }}-pip-topy"
         -
-            name: "Install yamllint"
+            name: "Install topy"
             run: |
                 pip install --user topy
         -
             name: "Search for misspellings"
             run: |
-                "$(python -m site --user-base)/bin/topy" $(
+                "$(python -m site --user-base)/bin/topy" -a $(
                     git ls-files -- \
                         ':!:dist/' ':!:vendor/' \
                         ':!:composer.lock' ':!:yarn.lock' ':!:package-lock.json'
                 )
+        -
+            name: "Check differences to repository"
+            run: "git diff --exit-code"
