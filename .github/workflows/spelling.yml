@@ -29,11 +29,20 @@ jobs:
             with:
                 repository: "${{ inputs.repository }}"
         -
-            name: "Search for misspellings"
-            uses: "codespell-project/actions-codespell@v2.0"
+            name: "Cache pip"
+            uses: "actions/cache@v3.3.1"
             with:
-                skip: "./.git,package-lock.json"
-                check_hidden: true
-                check_filenames: true
-                builtin: "clear,rare,informal,usage,code,names"
-                ignore_words_list: "master"
+                path: "~/.cache/pip"
+                key: "${{ runner.os }}-pip-topy"
+        -
+            name: "Install yamllint"
+            run: |
+                pip install --user topy
+        -
+            name: "Search for misspellings"
+            run: |
+                "$(python -m site --user-base)/bin/topy" $(
+                    git ls-files -- \
+                        ':!:dist/' ':!:vendor/' \
+                        ':!:composer.lock' ':!:yarn.lock' ':!:package-lock.json'
+                )
