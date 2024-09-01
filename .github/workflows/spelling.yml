@@ -18,8 +18,8 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    typos_check:
-        name: "文A Typos check - ${{ inputs.repository }}"
+    cspell_check:
+        name: "CSpell check - ${{ inputs.repository }}"
         runs-on: "ubuntu-22.04"
         timeout-minutes: 1
         steps:
@@ -30,19 +30,4 @@ jobs:
                 repository: "${{ inputs.repository }}"
         -
             name: "Search for misspellings"
-            env:
-                GH_TOKEN: "${{ github.token }}"
-            run: |
-                set -o pipefail
-                mkdir -p "${{ runner.temp }}/typos"
-                RELEASE_ASSET_URL="$(
-                    gh api /repos/crate-ci/typos/releases/latest \
-                        --jq '."assets"[] | select(."name" | test("^typos-.+-x86_64-unknown-linux-musl\\.tar\\.gz$")) | ."browser_download_url"'
-                )"
-                wget --secure-protocol=TLSv1_3 --max-redirect=1 --retry-on-host-error --retry-connrefused --tries=3 \
-                    --quiet --output-document=- "${RELEASE_ASSET_URL}" \
-                    | tar -xz -C "${{ runner.temp }}/typos" ./typos
-                "${{ runner.temp }}/typos/typos" --version
-                git grep --files-with-matches -I -e '.' -- ':!:dist/' ':!:vendor/' \
-                    | "${{ runner.temp }}/typos/typos" --file-list - --format json \
-                    | jq --raw-output '"::warning file=\(.path),line=\(.line_num),col=\(.byte_offset)::\"\(.typo)\" should be \"" + (.corrections // [] | join("\" or \"") + "\".")'
+            uses: "streetsidesoftware/cspell-action@v6"
